@@ -1,0 +1,39 @@
+.filters {
+    display: flex;
+    gap: 15px;
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    align-items: center;
+}
+
+.filters input,
+.filters select {
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    font-size: 14px;
+    min-width: 150px;
+}
+
+.filters input:focus,
+.filters select:focus {
+    outline: none;
+    border-color: #d32f2f;
+}
+
+.filters button {
+    background: linear-gradient(90deg, #c62828, #d32f2f);
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.filters button:hover {
+    opacity: 0.9;
+}

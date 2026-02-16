@@ -1,0 +1,34 @@
+.cards {
+    display: flex;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.card {
+    flex: 1;
+    padding: 22px;
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.red {
+    background: linear-gradient(135deg, #b71c1c, #e53935);
+}
+
+.green {
+    background: linear-gradient(135deg, #2e7d32, #43a047);
+}
+
+.yellow {
+    background: linear-gradient(135deg, #f9a825, #fbc02d);
+}
+
+.gray {
+    background: linear-gradient(135deg, #616161, #757575);
+}
