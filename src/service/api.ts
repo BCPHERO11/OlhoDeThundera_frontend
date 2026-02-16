@@ -1,13 +1,35 @@
-import axios from "axios";
-import type {Occurrence} from "../types/Occurrence.ts";
+import type { Occurrence } from "../types/Occurrence";
 
-const api = axios.create({
-    baseURL: "http://localhost:8070/api",
-});
+export interface OccurrenceFilters {
+    status?: string;
+    type?: string;
+}
 
-export const fetchOccurrences = async (): Promise<T> => {
-    const response = await api.get<Occurrence[]>("/occurrences");
-    return response.data;
+const API_BASE_URL = `${import.meta.env.VITE_API_URL ?? "http://localhost:8070"}/api`;
+
+const buildQueryString = (filters: OccurrenceFilters): string => {
+    const params = new URLSearchParams();
+
+    if (filters.status) {
+        params.set("status", filters.status);
+    }
+
+    if (filters.type) {
+        params.set("type", filters.type);
+    }
+
+    const queryString = params.toString();
+    return queryString ? `?${queryString}` : "";
 };
 
-export default api;
+export const fetchOccurrences = async (
+    filters: OccurrenceFilters = {}
+): Promise<Occurrence[]> => {
+    const response = await fetch(`${API_BASE_URL}/occurrences${buildQueryString(filters)}`);
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch occurrences");
+    }
+
+    return (await response.json()) as Occurrence[];
+};

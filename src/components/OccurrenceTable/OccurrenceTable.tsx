@@ -1,61 +1,75 @@
 import "./OccurrenceTable.css";
-import {Occurrence} from "../../types/Occurrence";
+import type { Occurrence } from "../../types/Occurrence";
 
-const mockData: Occurrence[] = [
-    {
-        id: 1324,
-        type: "Incêndio Residencial",
-        location: "Aracaju",
-        status: "EM_ANDAMENTO",
-        team: "Equipe Alfa",
-    },
-    {
-        id: 1321,
-        type: "Acidente de Trânsito",
-        location: "Lagarto",
-        status: "CONCLUIDA",
-        team: "Equipe Bravo",
-    },
-];
+interface Props {
+    occurrences: Occurrence[];
+    loading?: boolean;
+    error?: string | null;
+}
 
-const OccurrenceTable: React.FC = () => {
+const formatStatus = (status: string) => status.replaceAll("_", " ");
+
+const OccurrenceTable: React.FC<Props> = ({ occurrences, loading = false, error = null }) => {
+    if (loading) {
+        return (
+            <div className="table-container">
+                <h3>Lista de Ocorrências</h3>
+                <p>Carregando ocorrências...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="table-container">
+                <h3>Lista de Ocorrências</h3>
+                <p>{error}</p>
+            </div>
+        );
+    }
+
     return (
         <div className="table-container">
             <h3>Lista de Ocorrências</h3>
 
             <table>
                 <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tipo</th>
-                    <th>Localização</th>
-                    <th>Status</th>
-                    <th>Equipe</th>
-                    <th>Ações</th>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Localização</th>
+                        <th>Status</th>
+                        <th>Equipe</th>
+                        <th>Ações</th>
+                    </tr>
                 </thead>
 
                 <tbody>
-                {mockData.map((occurrence) => (
-                    <tr key={occurrence.id}>
-                        <td>{occurrence.id}</td>
-                        <td>{occurrence.type}</td>
-                        <td>{occurrence.location}</td>
-                        <td>
-                            <span className={`status-badge status-${occurrence.status}`}>
-                                {occurrence.status.replace("_", " ")}
-                            </span>
-                        </td>
-                        <td>{occurrence.team}</td>
-                        <td>
-                            <button>Detalhes</button>
-                        </td>
-                    </tr>
-                ))}
+                    {occurrences.length === 0 ? (
+                        <tr>
+                            <td colSpan={6}>Nenhuma ocorrência encontrada para os filtros selecionados.</td>
+                        </tr>
+                    ) : (
+                        occurrences.map((occurrence) => (
+                            <tr key={occurrence.id}>
+                                <td>{occurrence.id}</td>
+                                <td>{occurrence.type}</td>
+                                <td>{occurrence.location}</td>
+                                <td>
+                                    <span className={`status-badge status-${occurrence.status}`}>
+                                        {formatStatus(occurrence.status)}
+                                    </span>
+                                </td>
+                                <td>{occurrence.team ?? "-"}</td>
+                                <td>
+                                    <button>Detalhes</button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
         </div>
-
     );
 };
 
