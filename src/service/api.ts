@@ -7,6 +7,12 @@ export interface OccurrenceFilters {
 
 const API_BASE_URL = `${import.meta.env.VITE_API_URL ?? "http://localhost:8070"}/api`;
 
+type ApiOccurrence = Partial<Occurrence> & {
+    tipo?: string;
+    localizacao?: string;
+    equipe?: string;
+};
+
 const buildQueryString = (filters: OccurrenceFilters): string => {
     const params = new URLSearchParams();
 
@@ -31,5 +37,14 @@ export const fetchOccurrences = async (
         throw new Error("Failed to fetch occurrences");
     }
 
-    return (await response.json()) as Occurrence[];
+    const payload = (await response.json()) as ApiOccurrence[] | ApiOccurrence;
+    const occurrences = Array.isArray(payload) ? payload : [payload];
+
+    return occurrences.map((occurrence, index) => ({
+        id: Number(occurrence.id ?? index + 1),
+        type: occurrence.type ?? occurrence.tipo ?? "-",
+        location: occurrence.location ?? occurrence.localizacao ?? "-",
+        status: occurrence.status ?? "unknown",
+        team: occurrence.team ?? occurrence.equipe ?? "-",
+    }));
 };

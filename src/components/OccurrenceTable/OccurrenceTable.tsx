@@ -7,7 +7,7 @@ interface Props {
     error?: string | null;
 }
 
-const formatStatus = (status: string) => status.replaceAll("_", " ");
+const formatStatus = (status?: string) => (status ?? "unknown").replaceAll("_", " ");
 
 const OccurrenceTable: React.FC<Props> = ({ occurrences, loading = false, error = null }) => {
     if (loading) {
@@ -56,7 +56,7 @@ const OccurrenceTable: React.FC<Props> = ({ occurrences, loading = false, error 
                                 <td>{occurrence.type}</td>
                                 <td>{occurrence.location}</td>
                                 <td>
-                                    <span className={`status-badge status-${occurrence.status}`}>
+                                    <span className={`status-badge status-${occurrence.status ?? "unknown"}`}>
                                         {formatStatus(occurrence.status)}
                                     </span>
                                 </td>
